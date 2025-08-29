@@ -43,6 +43,14 @@ app.get("/", (req, res) => {
   res.send("Backend is running!");
 });
 
+app.use((err, req, res, next) => {
+  console.error("Error:", err.message || err);
+  res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+  });
+});
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
